@@ -56,6 +56,9 @@ WEB_URL_LOAD_TARGETS = [
     "https://generative-ai.web-camp.io/"
 ]
 
+CHUNK_SIZE = 500
+CHUNK_OVERLAP = 50
+MAX_SEARCH_RESULTS = 5
 
 # ==========================================
 # プロンプトテンプレート
