@@ -1,5 +1,6 @@
 """
 このファイルは、画面表示に特化した関数定義のファイルです。
+株式会社EcoTeeの株主優待の内容を教えて
 """
 
 ############################################################
@@ -96,7 +97,8 @@ def display_conversation_log():
                         icon = utils.get_source_icon(message['content']['main_file_path'])
                         # 参照元ドキュメントのページ番号が取得できた場合にのみ、ページ番号を表示
                         if "main_page_number" in message["content"]:
-                            st.success(f"{message['content']['main_file_path']}", icon=icon)
+                            page_disp = message["content"]["main_page_number"] + 1 if isinstance(message["content"]["main_page_number"], int) else message["content"]["main_page_number"]
+                            st.success(f"{message['content']['main_file_path']}（ページNo.{page_disp}）", icon=icon)
                         else:
                             st.success(f"{message['content']['main_file_path']}", icon=icon)
                         
@@ -113,7 +115,8 @@ def display_conversation_log():
                                 icon = utils.get_source_icon(sub_choice['source'])
                                 # 参照元ドキュメントのページ番号が取得できた場合にのみ、ページ番号を表示
                                 if "page_number" in sub_choice:
-                                    st.info(f"{sub_choice['source']}", icon=icon)
+                                    page_disp = sub_choice["page_number"] + 1 if isinstance(sub_choice["page_number"], int) else sub_choice["page_number"]
+                                    st.info(f"{sub_choice['source']}（ページNo.{page_disp}）", icon=icon)
                                 else:
                                     st.info(f"{sub_choice['source']}", icon=icon)
                     # ファイルのありかの情報が取得できなかった場合、LLMからの回答のみ表示
@@ -167,8 +170,8 @@ def display_search_llm_response(llm_response):
         if "page" in llm_response["context"][0].metadata:
             # ページ番号を取得
             main_page_number = llm_response["context"][0].metadata["page"]
-            # 「メインドキュメントのファイルパス」と「ページ番号」を表示
-            st.success(f"{main_file_path}", icon=icon)
+            page_disp = main_page_number + 1 if isinstance(main_page_number, int) else main_page_number
+            st.success(f"{main_file_path}（ページNo.{page_disp}）", icon=icon)
         else:
             # 「メインドキュメントのファイルパス」を表示
             st.success(f"{main_file_path}", icon=icon)
@@ -223,8 +226,8 @@ def display_search_llm_response(llm_response):
                 icon = utils.get_source_icon(sub_choice['source'])
                 # ページ番号が取得できない場合のための分岐処理
                 if "page_number" in sub_choice:
-                    # 「サブドキュメントのファイルパス」と「ページ番号」を表示
-                    st.info(f"{sub_choice['source']}", icon=icon)
+                    page_disp = sub_choice["page_number"] + 1 if isinstance(sub_choice["page_number"], int) else sub_choice["page_number"]
+                    st.info(f"{sub_choice['source']}（ページNo.{page_disp}）", icon=icon)
                 else:
                     # 「サブドキュメントのファイルパス」を表示
                     st.info(f"{sub_choice['source']}", icon=icon)
@@ -303,8 +306,8 @@ def display_contact_llm_response(llm_response):
             if "page" in document.metadata:
                 # ページ番号を取得
                 page_number = document.metadata["page"]
-                # 「ファイルパス」と「ページ番号」
-                file_info = f"{file_path}"
+                page_disp = page_number + 1 if isinstance(page_number, int) else page_number
+                file_info = f"{file_path}（ページNo.{page_disp}）"
             else:
                 # 「ファイルパス」のみ
                 file_info = f"{file_path}"
