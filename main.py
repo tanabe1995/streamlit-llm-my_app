@@ -20,6 +20,16 @@ import components as cn
 # （自作）変数（定数）がまとめて定義・管理されているモジュール
 import constants as ct
 
+# .env を読み込む
+load_dotenv()
+
+# ログの基本設定（ハンドラ未設定時のみ）
+if not logging.getLogger().handlers:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s - %(message)s"
+    )
+
 
 ############################################################
 # 2. 設定関連
@@ -40,10 +50,15 @@ try:
     # 初期化処理（「initialize.py」の「initialize」関数を実行）
     initialize()
 except Exception as e:
-    # エラーログの出力
-    logger.error(f"{ct.INITIALIZE_ERROR_MESSAGE}\n{e}")
-    # エラーメッセージの画面表示
+    import traceback
+    # 例外の詳細なスタックトレース
+    tb = traceback.format_exc()
+    # エラーログを詳細付きで出力
+    logger.exception(f"{ct.INITIALIZE_ERROR_MESSAGE}")
+    # 画面にも概要＋詳細（折りたたみ）を表示
     st.error(utils.build_error_message(ct.INITIALIZE_ERROR_MESSAGE), icon=ct.ERROR_ICON)
+    with st.expander("エラー詳細（開いて内容を開示）"):
+        st.code(tb, language="text")
     # 後続の処理を中断
     st.stop()
 
